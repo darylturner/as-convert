@@ -18,7 +18,7 @@ func convertASplain(i string) (string, error) {
 	}
 
 	const mask = 65535
-	right := (x & mask)            // mask with right hand bits
+	right := (x & mask)              // mask with right hand bits
 	left := (x & (mask << 16)) >> 16 // mask with left hand bits and shift 2 bytes
 	asdot := fmt.Sprintf("%v.%v", left, right)
 
@@ -52,7 +52,7 @@ func convertASdot(i string) (uint64, error) {
 		return 0, fmt.Errorf("asdot split failed: %w", err)
 	}
 
-	asplain := ((e[0] * 65535) + e[1] + e[0])
+	asplain := (e[0] << 16) | e[1]
 	return asplain, nil
 }
 
