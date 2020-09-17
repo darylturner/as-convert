@@ -17,8 +17,9 @@ func convertASplain(i string) (string, error) {
 		return "", fmt.Errorf("not valid 4 byte asn")
 	}
 
-	left := (x / 65535)
-	right := (x - (65535 * left) - left)
+	const mask = 65535
+	right := (x & mask)            // mask with right hand bits
+	left := (x & (mask << 16)) >> 16 // mask with left hand bits and shift 2 bytes
 	asdot := fmt.Sprintf("%v.%v", left, right)
 
 	return asdot, nil
