@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
@@ -16,23 +17,19 @@ func convertASplain(i string) (string, error) {
 	if x > 4294967296 {
 		return "", fmt.Errorf("not valid 4 byte asn")
 	}
-
 	const mask = 65535
-	right := (x & mask)              // mask with right hand bits
+	right := x & mask                // mask with right hand bits
 	left := (x & (mask << 16)) >> 16 // mask with left hand bits and shift 2 bytes
-
 	asdot := fmt.Sprintf("%v.%v", left, right)
 	return asdot, nil
 }
 
 func splitASdot(i string) ([]uint64, error) {
 	elements := make([]uint64, 0)
-
 	split := strings.Split(i, ".")
 	if len(split) != 2 {
 		return elements, fmt.Errorf("unexpected number of asdot elements")
 	}
-
 	for _, i := range split {
 		x, err := strconv.ParseUint(i, 10, 64)
 		if err != nil {
@@ -51,16 +48,21 @@ func convertASdot(i string) (uint64, error) {
 	if err != nil {
 		return 0, fmt.Errorf("asdot split failed: %w", err)
 	}
-
 	asplain := (e[0] << 16) | e[1]
 	return asplain, nil
 }
 
 func main() {
+	var input string
 	if len(os.Args) != 2 {
-		log.Fatal("usage: as-convert <4-byte asn>")
+		inBytes, err := ioutil.ReadAll(os.Stdin)
+		if err != nil {
+			log.Fatal(err)
+		}
+		input = strings.TrimRight(string(inBytes), "\n")
+	} else {
+		input = os.Args[1]
 	}
-	input := os.Args[1]
 	if strings.Contains(input, ".") {
 		out, err := convertASdot(input)
 		if err != nil {
