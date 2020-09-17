@@ -12,7 +12,9 @@ import (
 func convertASplain(i string) (string, error) {
 	x, err := strconv.ParseUint(i, 10, 64)
 	if err != nil {
-		return "", fmt.Errorf("failed to convert asplain to integer: %w", err)
+		return "", fmt.Errorf(
+			"failed to convert asplain to integer: %w", err,
+		)
 	}
 	if x > 4294967296 {
 		return "", fmt.Errorf("not valid 4 byte asn")
@@ -33,7 +35,9 @@ func splitASdot(i string) ([]uint64, error) {
 	for _, i := range split {
 		x, err := strconv.ParseUint(i, 10, 64)
 		if err != nil {
-			return elements, fmt.Errorf("failed to convert asdot elements to integer: %w", err)
+			return elements, fmt.Errorf(
+				"failed to convert asdot elements to integer: %w", err,
+			)
 		}
 		if x > 65535 {
 			return elements, fmt.Errorf("asdot element(s) invalid")
