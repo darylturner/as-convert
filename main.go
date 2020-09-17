@@ -56,6 +56,9 @@ func convertASdot(i string) (uint64, error) {
 }
 
 func main() {
+	if len(os.Args) != 2 {
+		log.Fatal("usage: as-convert <4-byte asn>")
+	}
 	input := os.Args[1]
 	if strings.Contains(input, ".") {
 		out, err := convertASdot(input)
