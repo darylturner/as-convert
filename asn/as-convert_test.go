@@ -1,16 +1,16 @@
-package main
+package asn
 
 import (
 	"testing"
 )
 
 func TestConv(t *testing.T) {
-	x, err := convertASplain("4294901767")
+	x, err := ConvertASplain("4294901767")
 	if err != nil {
 		t.Errorf("unexpected error in asplain->asdot conversion: %w", err)
 	}
 
-	y, err := convertASdot(x)
+	y, err := ConvertASdot(x)
 	if err != nil {
 		t.Errorf("unexpected error in asdot->asplain conversion: %w", err)
 	}
